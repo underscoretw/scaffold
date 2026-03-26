@@ -1,0 +1,10 @@
+.DS_Store
+.editorconfig
+.gitattributes
+.gitignore
+.github
+behat.yml
+features
+phpcs.xml.dist
+phpstan.neon.dist
+wp-cli.yml

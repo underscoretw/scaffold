@@ -1,0 +1,65 @@
+{
+  "name": "underscoretw/scaffold",
+  "description": "Generates starter themes from underscoretw.com via WP-CLI.",
+  "homepage": "https://github.com/gregsullivan/_tw-cli",
+  "type": "wp-cli-package",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Greg Sullivan",
+      "email": "greg@gregsullivan.com",
+      "homepage": "https://gregsullivan.com"
+    }
+  ],
+  "require": {
+    "wp-cli/wp-cli": "^2.12"
+  },
+  "require-dev": {
+    "wp-cli/extension-command": "^2",
+    "wp-cli/wp-cli-tests": "^5"
+  },
+  "config": {
+    "process-timeout": 7200,
+    "sort-packages": true,
+    "allow-plugins": {
+      "dealerdirect/phpcodesniffer-composer-installer": true,
+      "johnpbloch/wordpress-core-installer": true,
+      "phpstan/extension-installer": true
+    },
+    "lock": false
+  },
+  "extra": {
+    "commands": [
+      "scaffold _tw",
+      "scaffold underscoretw"
+    ]
+  },
+  "autoload": {
+    "classmap": [
+      "src/"
+    ],
+    "files": [
+      "underscoretw-command.php"
+    ]
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "scripts": {
+    "behat": "run-behat-tests",
+    "behat-rerun": "rerun-behat-tests",
+    "lint": "run-linter-tests",
+    "phpcs": "run-phpcs-tests",
+    "phpstan": "run-phpstan-tests",
+    "phpcbf": "run-phpcbf-cleanup",
+    "prepare-tests": "install-package-tests",
+    "test": [
+      "@lint",
+      "@phpcs",
+      "@phpstan",
+      "@behat"
+    ]
+  },
+  "support": {
+    "issues": "https://github.com/gregsullivan/_tw-cli/issues"
+  }
+}
