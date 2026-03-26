@@ -1,6 +1,5 @@
 {
   "name": "underscoretw/scaffold",
-  "version": "0.9.0",
   "description": "Generates starter themes from underscoretw.com via WP-CLI.",
   "homepage": "https://github.com/underscoretw/scaffold",
   "type": "wp-cli-package",
