@@ -5,7 +5,7 @@ A WP-CLI package that generates starter themes from [underscoretw.com](https://u
 ## Installation
 
 ```bash
-wp package install underscoretw/scaffold
+wp package install underscoretw/scaffold:@stable
 ```
 
 ## Usage
