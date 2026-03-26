@@ -29,6 +29,9 @@
     "lock": false
   },
   "extra": {
+    "branch-alias": {
+      "dev-main": "1.x-dev"
+    },
     "commands": [
       "scaffold _tw",
       "scaffold underscoretw"
