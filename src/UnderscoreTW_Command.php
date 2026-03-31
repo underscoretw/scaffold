@@ -252,8 +252,11 @@ class UnderscoreTW_Command extends WP_CLI_Command {
 
 		// 1. Theme Name (required).
 		while ( true ) {
-			$theme_name = \cli\prompt( 'theme name', false, ': ' );
-			$theme_name = trim( $theme_name );
+			\cli\out( 'theme name (_tw): ' );
+			$theme_name = trim( \cli\input() );
+			if ( '' === $theme_name ) {
+				$theme_name = '_tw';
+			}
 			if ( '' !== $theme_name ) {
 				break;
 			}
