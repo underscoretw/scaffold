@@ -63,7 +63,8 @@ class UnderscoreTW_Command extends WP_CLI_Command {
 	 */
 	public function __invoke( $args, $assoc_args ) {
 		if ( empty( $args ) ) {
-			list( $args, $assoc_args ) = $this->interactive_init();
+			list( $args, $wizard_assoc_args ) = $this->interactive_init( $assoc_args );
+			$assoc_args                       = array_merge( $assoc_args, $wizard_assoc_args );
 		}
 
 		$theme_slug = sanitize_title( $args[0] );
@@ -241,9 +242,10 @@ class UnderscoreTW_Command extends WP_CLI_Command {
 	/**
 	 * Runs the interactive wizard when no slug is provided.
 	 *
+	 * @param array<string, bool|string> $assoc_args CLI arguments used as prompt defaults.
 	 * @return array{0: string[], 1: array<string, string>} [ $args, $assoc_args ] to feed back into __invoke().
 	 */
-	private function interactive_init() {
+	private function interactive_init( $assoc_args = [] ) {
 		WP_CLI::log( 'This utility will walk you through generating a theme from underscoretw.com.' );
 		WP_CLI::log( 'All values except the theme name can be left blank.' );
 		WP_CLI::log( '' );
@@ -251,11 +253,12 @@ class UnderscoreTW_Command extends WP_CLI_Command {
 		WP_CLI::log( '' );
 
 		// 1. Theme Name (required).
+		$default_theme_name = (string) Utils\get_flag_value( $assoc_args, 'theme_name', '_tw' );
 		while ( true ) {
-			\cli\out( 'theme name (_tw): ' );
+			\cli\out( "Theme Name ({$default_theme_name}): " );
 			$theme_name = trim( \cli\input() );
 			if ( '' === $theme_name ) {
-				$theme_name = '_tw';
+				$theme_name = $default_theme_name;
 			}
 			if ( '' !== $theme_name ) {
 				break;
@@ -266,7 +269,7 @@ class UnderscoreTW_Command extends WP_CLI_Command {
 		// 2. Theme Slug (derived from name).
 		$default_slug = sanitize_title( $theme_name );
 		while ( true ) {
-			\cli\out( "theme slug ({$default_slug}): " );
+			\cli\out( "Theme Slug ({$default_slug}): " );
 			$theme_slug = sanitize_title( trim( \cli\input() ) );
 			if ( '' === $theme_slug ) {
 				$theme_slug = sanitize_title( $default_slug );
@@ -279,9 +282,10 @@ class UnderscoreTW_Command extends WP_CLI_Command {
 		}
 
 		// 3. Function Prefix (derived from slug).
-		$default_prefix = str_replace( '-', '_', $theme_slug );
+		$arg_prefix     = (string) Utils\get_flag_value( $assoc_args, 'prefix', '' );
+		$default_prefix = '' !== $arg_prefix ? $arg_prefix : str_replace( '-', '_', $theme_slug );
 		while ( true ) {
-			\cli\out( "function prefix ({$default_prefix}): " );
+			\cli\out( "Function Prefix ({$default_prefix}): " );
 			$prefix = sanitize_title( trim( \cli\input() ) );
 			if ( '' === $prefix ) {
 				$prefix = $default_prefix;
@@ -294,30 +298,54 @@ class UnderscoreTW_Command extends WP_CLI_Command {
 		}
 
 		// 4-7. Optional fields.
-		$author      = trim( \cli\prompt( 'author', '', ': ' ) );
-		$author_uri  = trim( \cli\prompt( 'author uri', '', ': ' ) );
-		$theme_uri   = trim( \cli\prompt( 'theme uri', '', ': ' ) );
-		$description = trim( \cli\prompt( 'description', '', ': ' ) );
+		$default_author      = (string) Utils\get_flag_value( $assoc_args, 'author', '' );
+		$default_author_uri  = (string) Utils\get_flag_value( $assoc_args, 'author_uri', '' );
+		$default_theme_uri   = (string) Utils\get_flag_value( $assoc_args, 'theme_uri', '' );
+		$default_description = (string) Utils\get_flag_value( $assoc_args, 'description', '' );
+
+		\cli\out( '' !== $default_author ? "Author ({$default_author}): " : 'Author: ' );
+		$author = trim( \cli\input() );
+		if ( '' === $author ) {
+			$author = $default_author;
+		}
+
+		\cli\out( '' !== $default_author_uri ? "Author URI ({$default_author_uri}): " : 'Author URI: ' );
+		$author_uri = trim( \cli\input() );
+		if ( '' === $author_uri ) {
+			$author_uri = $default_author_uri;
+		}
+
+		\cli\out( '' !== $default_theme_uri ? "Theme URI ({$default_theme_uri}): " : 'Theme URI: ' );
+		$theme_uri = trim( \cli\input() );
+		if ( '' === $theme_uri ) {
+			$theme_uri = $default_theme_uri;
+		}
+
+		\cli\out( '' !== $default_description ? "Description ({$default_description}): " : 'Description: ' );
+		$description = trim( \cli\input() );
+		if ( '' === $description ) {
+			$description = $default_description;
+		}
 
 		// Print summary.
 		WP_CLI::log( '' );
 		WP_CLI::log( 'About to generate a theme with the following settings:' );
 		WP_CLI::log( '' );
-		WP_CLI::log( "  Theme Name:  {$theme_name}" );
-		WP_CLI::log( "  Slug:        {$theme_slug}" );
-		WP_CLI::log( "  Prefix:      {$prefix}" );
+		WP_CLI::log( "  Theme Name:      {$theme_name}" );
+		WP_CLI::log( "  Theme Slug:      {$theme_slug}" );
+		WP_CLI::log( "  Function Prefix: {$prefix}" );
 
 		if ( '' !== $author ) {
-			WP_CLI::log( "  Author:      {$author}" );
+			WP_CLI::log( "  Author:          {$author}" );
 		}
 		if ( '' !== $author_uri ) {
-			WP_CLI::log( "  Author URI:  {$author_uri}" );
+			WP_CLI::log( "  Author URI:      {$author_uri}" );
 		}
 		if ( '' !== $theme_uri ) {
-			WP_CLI::log( "  Theme URI:   {$theme_uri}" );
+			WP_CLI::log( "  Theme URI:       {$theme_uri}" );
 		}
 		if ( '' !== $description ) {
-			WP_CLI::log( "  Description: {$description}" );
+			WP_CLI::log( "  Description:     {$description}" );
 		}
 		WP_CLI::log( '' );
 

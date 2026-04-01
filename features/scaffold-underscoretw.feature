@@ -194,14 +194,103 @@ Feature: Scaffold a starter theme from underscoretw.com
       """
     And STDOUT should contain:
       """
-      Theme Name:  Starter Theme
+      Theme Name:      Starter Theme
       """
     And STDOUT should contain:
       """
-      Slug:        starter-theme
+      Theme Slug:      starter-theme
       """
     And STDOUT should contain:
       """
       Success: Created theme 'Starter Theme'.
       """
     And the {THEME_DIR}/starter-theme/theme/style.css file should exist
+
+  Scenario: Interactive wizard uses CLI arguments as defaults
+    Given a WP install
+    And I run `wp theme path`
+    And save STDOUT as {THEME_DIR}
+    And a wizard-args-input file:
+      """
+
+
+
+
+
+
+
+
+      """
+
+    When I run `wp scaffold _tw --theme_name="Args Theme" --author="Jane Doe" < wizard-args-input`
+    Then STDOUT should contain:
+      """
+      Theme Name:      Args Theme
+      """
+    And STDOUT should contain:
+      """
+      Theme Slug:      args-theme
+      """
+    And STDOUT should contain:
+      """
+      Author:          Jane Doe
+      """
+    And STDOUT should contain:
+      """
+      Success: Created theme 'Args Theme'.
+      """
+    And the {THEME_DIR}/args-theme/theme/style.css file should exist
+
+  Scenario: Interactive wizard with --activate flag
+    Given a WP install
+    And a wizard-activate-input file:
+      """
+      Activate Test
+
+
+
+
+
+
+
+      """
+
+    When I run `wp scaffold _tw --activate < wizard-activate-input`
+    Then STDOUT should contain:
+      """
+      Success: Created theme 'Activate Test'.
+      """
+    And STDOUT should contain:
+      """
+      Success: Switched to 'Activate Test' theme.
+      """
+
+  Scenario: Interactive wizard with --force flag
+    Given a WP install
+    And a wizard-force-input file:
+      """
+      Force Test
+
+
+
+
+
+
+
+      """
+
+    When I run `wp scaffold _tw < wizard-force-input`
+    Then STDOUT should contain:
+      """
+      Success: Created theme 'Force Test'.
+      """
+
+    When I run `wp scaffold _tw --force < wizard-force-input`
+    Then STDOUT should contain:
+      """
+      Removing existing theme directory 'force-test'...
+      """
+    And STDOUT should contain:
+      """
+      Success: Created theme 'Force Test'.
+      """
