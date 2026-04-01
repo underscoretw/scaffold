@@ -252,18 +252,12 @@ class UnderscoreTW_Command extends WP_CLI_Command {
 		WP_CLI::log( 'Press ^C at any time to quit.' );
 		WP_CLI::log( '' );
 
-		// 1. Theme Name (required).
+		// 1. Theme Name (always has a default).
 		$default_theme_name = (string) Utils\get_flag_value( $assoc_args, 'theme_name', '_tw' );
-		while ( true ) {
-			\cli\out( "Theme Name ({$default_theme_name}): " );
-			$theme_name = trim( \cli\input() );
-			if ( '' === $theme_name ) {
-				$theme_name = $default_theme_name;
-			}
-			if ( '' !== $theme_name ) {
-				break;
-			}
-			WP_CLI::warning( 'Theme name is required.' );
+		\cli\out( "Theme Name ({$default_theme_name}): " );
+		$theme_name = trim( \cli\input() );
+		if ( '' === $theme_name ) {
+			$theme_name = $default_theme_name;
 		}
 
 		// 2. Theme Slug (derived from name).
