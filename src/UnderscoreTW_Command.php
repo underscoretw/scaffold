@@ -12,7 +12,7 @@ class UnderscoreTW_Command extends WP_CLI_Command {
 	private const TOKEN_PATTERN = '/^[a-z_]\w*$/i';
 
 	/**
-	 * Generates a starter theme from underscoretw.com.
+	 * Generates a starter theme from underscoretw.com. Omit the slug to use the wizard.
 	 *
 	 * ## OPTIONS
 	 *

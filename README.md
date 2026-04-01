@@ -4,8 +4,10 @@ A WP-CLI package that generates starter themes from [underscoretw.com](https://u
 
 ## Installation
 
+After [installing WP-CLI](https://wp-cli.org/#installing), please run:
+
 ```bash
-wp package install underscoretw/scaffold:@stable
+wp package install underscoretw/scaffold
 ```
 
 ## Usage
@@ -20,13 +22,13 @@ wp scaffold _tw [<slug>] [--theme_name=<title>] [--prefix=<prefix>]
 
 ### Interactive Wizard
 
-Run the command without any arguments to launch an interactive wizard that walks you through the theme setup:
+Run the command without a slug to launch the interactive wizard:
 
 ```bash
 wp scaffold _tw
 ```
 
-The wizard will prompt you for:
+The wizard will prompt for:
 
 1. **Theme name** (required)
 2. **Theme slug** (derived from the name by default)
