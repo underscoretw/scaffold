@@ -355,26 +355,26 @@ class UnderscoreTW_Command extends WP_CLI_Command {
 		}
 
 		// Build return values.
-		$args       = [ $theme_slug ];
-		$assoc_args = [
+		$wizard_args       = [ $theme_slug ];
+		$wizard_assoc_args = [
 			'theme_name' => $theme_name,
 		];
 
 		if ( '' !== $prefix ) {
-			$assoc_args['prefix'] = $prefix;
+			$wizard_assoc_args['prefix'] = $prefix;
 		}
 		if ( '' !== $author ) {
-			$assoc_args['author'] = $author;
+			$wizard_assoc_args['author'] = $author;
 		}
 		if ( '' !== $author_uri ) {
-			$assoc_args['author_uri'] = $author_uri;
+			$wizard_assoc_args['author_uri'] = $author_uri;
 		}
 		if ( '' !== $theme_uri ) {
-			$assoc_args['theme_uri'] = $theme_uri;
+			$wizard_assoc_args['theme_uri'] = $theme_uri;
 		}
 		if ( '' !== $description ) {
-			$assoc_args['description'] = $description;
+			$wizard_assoc_args['description'] = $description;
 		}
-		return [ $args, $assoc_args ];
+		return [ $wizard_args, $wizard_assoc_args ];
 	}
 }
