@@ -292,34 +292,10 @@ class UnderscoreTW_Command extends WP_CLI_Command {
 		}
 
 		// 4-7. Optional fields.
-		$default_author      = (string) Utils\get_flag_value( $assoc_args, 'author', '' );
-		$default_author_uri  = (string) Utils\get_flag_value( $assoc_args, 'author_uri', '' );
-		$default_theme_uri   = (string) Utils\get_flag_value( $assoc_args, 'theme_uri', '' );
-		$default_description = (string) Utils\get_flag_value( $assoc_args, 'description', '' );
-
-		\cli\out( '' !== $default_author ? "Author ({$default_author}): " : 'Author: ' );
-		$author = trim( \cli\input() );
-		if ( '' === $author ) {
-			$author = $default_author;
-		}
-
-		\cli\out( '' !== $default_author_uri ? "Author URI ({$default_author_uri}): " : 'Author URI: ' );
-		$author_uri = trim( \cli\input() );
-		if ( '' === $author_uri ) {
-			$author_uri = $default_author_uri;
-		}
-
-		\cli\out( '' !== $default_theme_uri ? "Theme URI ({$default_theme_uri}): " : 'Theme URI: ' );
-		$theme_uri = trim( \cli\input() );
-		if ( '' === $theme_uri ) {
-			$theme_uri = $default_theme_uri;
-		}
-
-		\cli\out( '' !== $default_description ? "Description ({$default_description}): " : 'Description: ' );
-		$description = trim( \cli\input() );
-		if ( '' === $description ) {
-			$description = $default_description;
-		}
+		$author      = $this->prompt_optional( 'Author', $assoc_args, 'author' );
+		$author_uri  = $this->prompt_optional( 'Author URI', $assoc_args, 'author_uri' );
+		$theme_uri   = $this->prompt_optional( 'Theme URI', $assoc_args, 'theme_uri' );
+		$description = $this->prompt_optional( 'Description', $assoc_args, 'description' );
 
 		// Print summary.
 		WP_CLI::log( '' );
@@ -376,5 +352,20 @@ class UnderscoreTW_Command extends WP_CLI_Command {
 			$wizard_assoc_args['description'] = $description;
 		}
 		return [ $wizard_args, $wizard_assoc_args ];
+	}
+
+	/**
+	 * Prompts for an optional field, using a CLI argument as the default when available.
+	 *
+	 * @param string                     $label      The prompt label.
+	 * @param array<string, bool|string> $assoc_args CLI arguments.
+	 * @param string                     $flag       The flag key to read from $assoc_args.
+	 * @return string The value entered by the user, or the default.
+	 */
+	private function prompt_optional( $label, $assoc_args, $flag ) {
+		$default = (string) Utils\get_flag_value( $assoc_args, $flag, '' );
+		\cli\out( '' !== $default ? "{$label} ({$default}): " : "{$label}: " );
+		$value = trim( \cli\input() );
+		return '' !== $value ? $value : $default;
 	}
 }
