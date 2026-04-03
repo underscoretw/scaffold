@@ -12,21 +12,25 @@ wp package install underscoretw/scaffold
 
 ## Usage
 
+Run the command without a slug to launch the interactive wizard:
+
+```bash
+wp scaffold _tw
+```
+
+LLMs or automated processes can generate themes using arguments:
+
 ```
 wp scaffold _tw [<slug>] [--theme_name=<title>] [--prefix=<prefix>]
     [--theme_uri=<uri>] [--author=<full-name>] [--author_uri=<uri>]
     [--description=<text>] [--activate] [--enable-network] [--force]
 ```
 
-`wp scaffold underscoretw` is also available as an alias.
+All of the above arguments also work with the interactive wizard.
+
+`wp scaffold underscoretw` is available as an alias.
 
 ### Interactive Wizard
-
-Run the command without a slug to launch the interactive wizard:
-
-```bash
-wp scaffold _tw
-```
 
 The wizard will prompt for:
 
@@ -42,14 +46,14 @@ After collecting your inputs, the wizard displays a summary and asks for confirm
 | Option | Description |
 |---|---|
 | `<slug>` | The slug for the new theme. If omitted, the interactive wizard is launched. |
-| `--theme_name=<title>` | Theme name. Defaults to the slug with the first letter capitalized. |
-| `--prefix=<prefix>` | Function prefix for the theme. Derived from the slug by default. |
+| `--theme_name=<title>` | Theme name. Derived from the slug when not set. |
+| `--prefix=<prefix>` | Function prefix for the theme. Derived from the slug when not set. |
 | `--theme_uri=<uri>` | Theme URI header value. |
 | `--author=<full-name>` | Author header value. |
 | `--author_uri=<uri>` | Author URI header value. |
 | `--description=<text>` | Description header value. |
 | `--activate` | Activate the theme after generating it. |
-| `--enable-network` | Network-enable the theme after generating it. |
+| `--enable-network` | Enable the theme for the entire network after generating it. |
 | `--force` | Overwrite the theme directory if it already exists. |
 
 ### Examples
