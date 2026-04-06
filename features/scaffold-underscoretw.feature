@@ -185,6 +185,7 @@ Feature: Scaffold a starter theme from underscoretw.com
 
       A starter theme built with _tw
 
+
       """
 
     When I run `wp scaffold _tw < wizard-input`
@@ -212,6 +213,7 @@ Feature: Scaffold a starter theme from underscoretw.com
     And save STDOUT as {THEME_DIR}
     And a wizard-args-input file:
       """
+
 
 
 
@@ -253,6 +255,7 @@ Feature: Scaffold a starter theme from underscoretw.com
 
 
 
+
       """
 
     When I run `wp scaffold _tw --activate < wizard-activate-input`
@@ -277,6 +280,7 @@ Feature: Scaffold a starter theme from underscoretw.com
 
 
 
+
       """
 
     When I run `wp scaffold _tw < wizard-force-input`
@@ -293,4 +297,63 @@ Feature: Scaffold a starter theme from underscoretw.com
     And STDOUT should contain:
       """
       Success: Created theme 'Force Test'.
+      """
+
+  Scenario: Interactive wizard with activate prompt answered yes
+    Given a WP install
+    And a wizard-activate-yes-input file:
+      """
+      Activate Wizard Test
+
+
+
+
+
+
+      yes
+
+      """
+
+    When I run `wp scaffold _tw < wizard-activate-yes-input`
+    Then STDOUT should contain:
+      """
+      Activate:        yes
+      """
+    And STDOUT should contain:
+      """
+      Success: Created theme 'Activate Wizard Test'.
+      """
+    And STDOUT should contain:
+      """
+      Success: Switched to 'Activate Wizard Test' theme.
+      """
+
+  Scenario: Interactive wizard on multisite with network-enable prompt
+    Given a WP multisite install
+    And a wizard-network-input file:
+      """
+      Network Test
+
+
+
+
+
+
+      no
+      yes
+
+      """
+
+    When I run `wp scaffold _tw < wizard-network-input`
+    Then STDOUT should contain:
+      """
+      Network Enable:  yes
+      """
+    And STDOUT should contain:
+      """
+      Success: Created theme 'Network Test'.
+      """
+    And STDOUT should contain:
+      """
+      Success: Network enabled the 'Network Test' theme.
       """

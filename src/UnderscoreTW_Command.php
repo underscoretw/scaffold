@@ -299,6 +299,26 @@ class UnderscoreTW_Command extends WP_CLI_Command {
 		$theme_uri   = $this->prompt_optional( 'Theme URI', $assoc_args, 'theme_uri' );
 		$description = $this->prompt_optional( 'Description', $assoc_args, 'description' );
 
+		// 8. Activate prompt.
+		$default_activate = Utils\get_flag_value( $assoc_args, 'activate', false ) ? 'yes' : 'no';
+		\cli\out( "Activate theme? ({$default_activate}): " );
+		$activate_input = strtolower( trim( \cli\input() ) );
+		if ( '' === $activate_input ) {
+			$activate_input = $default_activate;
+		}
+		$activate = in_array( $activate_input, [ 'y', 'yes' ], true );
+
+		// 9. Network-enable prompt (multisite only).
+		if ( is_multisite() ) {
+			$default_network = Utils\get_flag_value( $assoc_args, 'enable-network', false ) ? 'yes' : 'no';
+			\cli\out( "Network enable? ({$default_network}): " );
+			$network_input = strtolower( trim( \cli\input() ) );
+			if ( '' === $network_input ) {
+				$network_input = $default_network;
+			}
+			$network_enable = in_array( $network_input, [ 'y', 'yes' ], true );
+		}
+
 		// Print summary.
 		WP_CLI::log( '' );
 		WP_CLI::log( 'About to generate a theme with the following settings:' );
@@ -318,6 +338,12 @@ class UnderscoreTW_Command extends WP_CLI_Command {
 		}
 		if ( '' !== $description ) {
 			WP_CLI::log( "  Description:     {$description}" );
+		}
+		if ( $activate ) {
+			WP_CLI::log( '  Activate:        yes' );
+		}
+		if ( isset( $network_enable ) && $network_enable ) {
+			WP_CLI::log( '  Network Enable:  yes' );
 		}
 		WP_CLI::log( '' );
 
@@ -352,6 +378,12 @@ class UnderscoreTW_Command extends WP_CLI_Command {
 		}
 		if ( '' !== $description ) {
 			$wizard_assoc_args['description'] = $description;
+		}
+		if ( $activate ) {
+			$wizard_assoc_args['activate'] = true;
+		}
+		if ( isset( $network_enable ) && $network_enable ) {
+			$wizard_assoc_args['enable-network'] = true;
 		}
 		return [ $wizard_args, $wizard_assoc_args ];
 	}
