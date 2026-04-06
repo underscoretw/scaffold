@@ -5,7 +5,7 @@ if ( ! class_exists( 'WP_CLI' ) ) {
 }
 
 if ( ! defined( 'WPCLI_UNDERSCORETW_VERSION' ) ) {
-	define( 'WPCLI_UNDERSCORETW_VERSION', '1.0.1' );
+	define( 'WPCLI_UNDERSCORETW_VERSION', '1.0.2' );
 }
 
 $wpcli_underscoretw_autoloader = __DIR__ . '/vendor/autoload.php';
