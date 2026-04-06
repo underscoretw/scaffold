@@ -231,10 +231,12 @@ class UnderscoreTW_Command extends WP_CLI_Command {
 
 		WP_CLI::success( "Created theme '{$theme_name}'." );
 
-		// Activate if requested. Network-enable takes precedence as it is a superset of activation.
+		// Activate or network-enable if requested.
 		if ( Utils\get_flag_value( $assoc_args, 'enable-network', false ) ) {
 			WP_CLI::run_command( [ 'theme', 'enable', $theme_slug . '/theme' ], [ 'network' => true ] );
-		} elseif ( Utils\get_flag_value( $assoc_args, 'activate', false ) ) {
+		}
+
+		if ( Utils\get_flag_value( $assoc_args, 'activate', false ) ) {
 			WP_CLI::run_command( [ 'theme', 'activate', $theme_slug . '/theme' ] );
 		}
 	}
